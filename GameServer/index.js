@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const blackJack = require('blackjack')
+
 const Room = require('./lib/room');
 
 const app = express();
@@ -14,8 +16,11 @@ const db = {
     rooms: []
 };
 
+// Get room details /room/MyGameRoom
 app.get('/room/:roomId', function (req, res) {
     const roomId = req.params.roomId;
+
+    console.log('room details requested');
 
     let room = db.rooms.find((room) => {
         return room.name === roomId;
@@ -24,8 +29,16 @@ app.get('/room/:roomId', function (req, res) {
     res.status(200).send(room);
 });
 
-app.post('/room/:roomId/user', function (req, res) {
+// Add player to room /room/MyGameRoom/players
+app.post('/room/:roomId/players/:playerName', function (req, res) {
     const roomId = req.params.roomId;
+    const playerName = req.params.playerName;
+
+    if (!playerName) {
+        res.status(500).send('Please give a name to the player');
+
+        return;
+    }
 
     if (!roomId) {
         res.status(500).send('Invalid room name');
@@ -42,7 +55,7 @@ app.post('/room/:roomId/user', function (req, res) {
         db.rooms.push(room);
     }
 
-    if (!room.addUniquePlayer(req.body.name)) {
+    if (!room.addUniquePlayer(playerName)) {
         res.status(400).send(`Player already exists with name ${req.body.name}`);
 
         return;
@@ -51,7 +64,7 @@ app.post('/room/:roomId/user', function (req, res) {
     res.status(200).send(room);
 });
 
-app.post('/room/:roomId/user/:userId/score', function (req, res) {
+app.post('/room/:roomId/players/:userId/score', function (req, res) {
     const roomId = req.params.roomId;
 
     let room = db.rooms.find((room) => {
