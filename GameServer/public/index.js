@@ -1,18 +1,65 @@
 $(function () {
-    var opp,you, turn = 1;
-    var skip = function () {
-        turn =1-turn
-        paintUserTurn()
+    // var opp,you, turn = 1;
+    // var skip = function () {
+    //     turn =1-turn
+    //     paintUserTurn()
+    //}
+function printCards(cards){
+    var str = '';
+    cards.map((card)=>{
+        switch(card.num){
+            case 13:
+                str+='K ';
+                break;
+            case 12:
+                str+='Q ';
+                break;
+            case 11:
+                str+='J ';
+                break;
+            case 1:
+                str+='A ';
+                break;
+            default:
+                str+=card.num+' ';
+
+        }
+    })
+    return str;
+}
+    function newGame() {
+        var roomId = 'asd';
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:3000/room/" + roomId + "/newgame/",
+            success: function (room) {
+                console.log("Done: " + room);
+                $("#players li").remove();
+                for (var user of room.players) {
+                    if (user.isAlive)
+                        var str = "<li class='player'>" + user.name + " : " + user.score +
+                            "<textarea id='" + user.name + "'>" +
+                            printCards(user.cards) + "</textarea></li>";
+                    $("#players").append(str)
+
+                }
+            },
+            error: function (e) {
+                console.log("Error", e.responseText);
+            }
+        });
     }
-    var another =function () {
-        if(turn === 1){
+
+
+    var another = function () {
+        if (turn === 1) {
 
             document.getElementById("you").value +=
-                ","+parseInt(Math.random() * 13+1);
+                "," + parseInt(Math.random() * 13 + 1);
 
             skip();
         }
-        else if(turn === 0) {
+        else if (turn === 0) {
 
 
             document.getElementById("opp").value +=
@@ -25,31 +72,7 @@ $(function () {
 
 
     }
-    var newGame = function() {
 
-        $("dealer").val(" ")
-        init();
-
-
-    }
-    function check_lost() {
-        // you = document.getElementById("you")
-        //     .value.split(',')
-        //     .reduce((a, b) => +a + +b, 0);
-        // opp = document.getElementById("opp")
-        //     .value.split(',')
-        //     .reduce((a, b) => +a + +b, 0);
-        //
-        // document.getElementById("score").value  = you+" : "+opp;
-        //
-        //
-        // if(you>21) {
-        //     document.getElementById("you").value += " - You Lost"
-        // } else if (opp>21) {
-        //
-        //     document.getElementById("opp").value += " - You Lost"
-        // }
-    }
 
     function paintUserTurn() {
         // if(turn ===1) {
@@ -62,52 +85,64 @@ $(function () {
         // }
 
 
-
     }
 
 
-    var init = function (){
-
-
-        //document.getElementById("opp").value +=
-         //   ""+parseInt(Math.random() * 13+1)
-        initPlayers()
-        paintUserTurn()
-        check_lost()
-
-    }
-
-    var initPlayers = function () {
+    var addNewUser = function () {
         var roomId = 'asd';
         var userId = $('#userName').val();
-        var score = $('#score');
+        var Ulplayers = $("#players")
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/room/" + roomId + "/players/" + userId,
+            success: function (room) {
+                $("#players li").remove();
+
+                for (var user of room.players) {
+                    if (user.isAlive)
+                        var str = "<li class='player'>" + user.name + " : " + user.score +
+                            "<textarea id='" + user.name + "'></textarea></li>";
+                    $("#players").append(str)
+                }
+            },
+            error: function (e) {
+                console.log("Error", e.responseText);
+            }
+        });
+    }
+    var initPlayers = () => {
+        var roomId = 'asd';
+        var userId = $('#userName').val();
+        var Ulplayers = $("#players")
 
         $.ajax({
             type: "GET",
-            url: "http://localhost:3000/room/" + roomId ,//room/:roomId/players/:userId/score
+            url: "http://localhost:3000/room/" + roomId,
             success: function (room) {
-                console.log("Done: " + room);
+                $("#players li").remove();
+                if(room.players)
                 for (var user of room.players) {
-                    if(user.isAlive)
+                    if (user.isAlive)
                         var str = "<li class='player'>" + user.name + " : " + user.score +
-                            "<textarea id='"+user.name+"'></textarea></li>";
+                            "<textarea id='" + user.name + "'></textarea></li>";
                     $("#players").append(str)
-                    score.attr('value', user.maxScore);
                 }
             },
-            error: function () {
-                console.log("Error");
+            error: function (e) {
+                console.log("Error", e.responseText);
             }
         });
     }
 
 
-    $(document).ready(init);
-    $("#b1").click(another);
-    $("#b2").click(skip);
+    $(document).ready(initPlayers);
+    // $("#b1").click(another);
+    // $("#b2").click(skip);
     $("#b3").click(newGame);
+    $("#addUser").click(addNewUser)
 
-})
+});
 
 
 

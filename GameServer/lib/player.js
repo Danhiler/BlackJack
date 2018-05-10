@@ -2,7 +2,7 @@ class Player {
     constructor(name, maxScore) {
         this.name = name;
         this.score = 0;
-
+this.cards = []
         this.maxScore = maxScore || 21;
 
         this.isAlive = true;

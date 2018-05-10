@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const blackJack = require('blackjack')
+
 
 const Room = require('./lib/room');
 
@@ -12,15 +12,25 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+
 const db = {
     rooms: []
 };
+app.get('/room/:roomId/newgame', (req,res)=>{
+    const roomId = req.params.roomId;
+console.log('active func')
+    let room = db.rooms.find((room) => {
+        return room.name === roomId;
+    }) || {};
+
+    room.newGame();
+    res.status(200).send(room);
+
+});
 
 // Get room details /room/MyGameRoom
 app.get('/room/:roomId', function (req, res) {
     const roomId = req.params.roomId;
-
-    console.log('room details requested');
 
     let room = db.rooms.find((room) => {
         return room.name === roomId;
