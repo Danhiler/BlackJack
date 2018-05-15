@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <title>My Game</title>
 
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
 
@@ -13,14 +12,28 @@
     <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-<section>
+<!--<select size="20" style="overflow-y: auto;>-->
+    <!--<optgroup label="Group 1">-->
+    <!--<optgroup label="Sub Group 1">-->
+        <!--<option>Item 1</option>-->
+        <!--<option>Item 2</option>-->
+        <!--<option>Item 3</option>-->
+    <!--</optgroup>-->
+    <!--<option>Item 2</option>-->
+    <!--<option>Item 3</option>-->
+<!--</optgroup>-->
+    <!--<optgroup label="Group 2">-->
+        <!--<option>Item 1</option>-->
+        <!--<option>Item 2</option>-->
+        <!--<option>Item 3</option>-->
+    <!--</optgroup>-->
+<!--</select>-->
     <input type="text" id="userName" placeholder="User Name" /><input type="button" id="addUser" value="Add User" />
-</section>
-<section class="container">
-    <input type="button" class="item0" id="score" name="score" value="a" disabled />
 
 
-    <textarea id="dealer" class="item2">  </textarea>
+    <section class="container">
+
+    <div id="dealer" class="item2">  </div>
     <ul id ="players"> </ul>
 
     <input type="button" class="draw-btn" name="more" id="b1" value="draw" >

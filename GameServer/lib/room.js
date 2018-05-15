@@ -6,6 +6,13 @@ class Room {
     constructor(name) {
         this.name = name;
         this.players = [];
+        this.turn = 1;
+
+        this.players.push(new Player('Dealer',21))
+
+    }
+    nextTurn(){
+        this.turn =(this.turn<=this.players.length)?this.turn+1:1;
     }
 
     getPlayers() {
@@ -39,7 +46,11 @@ class Room {
     newGame() {
         var pack = Pack();
         this.players.map((player) => player.cards.push(pack.popCard()));
-        this.players.map((player) => player.cards.push(pack.popCard()));
+        this.players.map((player) => {
+            if (player.name !== 'Dealer')
+                player.cards.push(pack.popCard())
+
+        });
         this.updateScore();
     }
     updateScore() {
@@ -51,7 +62,7 @@ class Room {
                 case 12: score+= 10; break;
                 case 11: score+= 10; break;
                 case 1:
-                    score+= (score>11)? 1:10; break;
+                    score+= (score>10)? 1:11; break;
                 default: score+= card.num; break;
             }
         });

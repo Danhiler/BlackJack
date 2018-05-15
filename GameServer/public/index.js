@@ -37,12 +37,13 @@ function printCards(cards){
                 $("#players li").remove();
                 for (var user of room.players) {
                     if (user.isAlive)
-                        var str = "<li class='player'>" + user.name + " : " + user.score +
+                        var str = "<li class='player' id='li-"+user.name+"'>" + user.name + " : " + user.score +
                             "<textarea id='" + user.name + "'>" +
                             printCards(user.cards) + "</textarea></li>";
                     $("#players").append(str)
 
                 }
+                paintUserTurn(room.players[room.turn].username)
             },
             error: function (e) {
                 console.log("Error", e.responseText);
@@ -52,39 +53,31 @@ function printCards(cards){
 
 
     var another = function () {
-        if (turn === 1) {
+        // if (turn === 1) {
+        //
+        //     document.getElementById("you").value +=
+        //         "," + parseInt(Math.random() * 13 + 1);
+        //
+        //     skip();
+        // }
+        // else if (turn === 0) {
+        //
+        //
+        //     document.getElementById("opp").value +=
+        //         "," + parseInt(Math.random() * 13 + 1);
+        //
+        //     skip()
+        // }
 
-            document.getElementById("you").value +=
-                "," + parseInt(Math.random() * 13 + 1);
-
-            skip();
-        }
-        else if (turn === 0) {
-
-
-            document.getElementById("opp").value +=
-                "," + parseInt(Math.random() * 13 + 1);
-
-            skip()
-        }
-
-        check_lost()
+        //check_lost()
 
 
     }
 
 
-    function paintUserTurn() {
-        // if(turn ===1) {
-        //     document.getElementById("you").style.backgroundColor ="lightblue";
-        //     document.getElementById("opp").style.backgroundColor ='';
-        // }
-        // else {
-        //     document.getElementById("you").style.backgroundColor ="";
-        //     document.getElementById("opp").style.backgroundColor ='lightblue';
-        // }
-
-
+    function paintUserTurn(userName) {
+    $('li').css("background-color","red");
+    $('#li-'+userName).css("background-color","lightblue");
     }
 
 
